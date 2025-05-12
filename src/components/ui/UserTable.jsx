@@ -5,7 +5,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Button } from "./Button";
+import { Button } from "./button";
 import logo from "../../assets/workforce-logo.png"; // Replace with your logo path
 import { useNavigate } from "react-router-dom";
 
