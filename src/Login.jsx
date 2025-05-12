@@ -182,13 +182,13 @@ const Login = () => {
               </a>
             </div>
 
-            <Button
+            <button
               type="submit"
               className="w-full bg-green-800 text-white rounded-md py-3 text-base font-medium"
               disabled={isLoading}
             >
               {isLoading ? "Logging in..." : "Login"}
-            </Button>
+            </button>
           </form>
         </div>
 
