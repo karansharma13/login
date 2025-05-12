@@ -55,8 +55,8 @@ const App = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full bg-gray-100">
-      <div className="flex w-300 h-210 rounded-lg shadow-lg bg-white">
+    <div className="flex items-center justify-center min-h-screen w-screen bg-gray-100">
+      <div className="flex w-auto h-auto rounded-lg shadow-lg bg-white">
         {/* Left Section - Form */}
         <div className="w-full md:w-1/2 p-8">
           <div className="flex items-center mb-6"></div>
