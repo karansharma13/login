@@ -56,25 +56,25 @@ const App = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full bg-gray-100 px-4 sm:px-6 lg:px-8">
-      <div className="flex flex-col md:flex-row w-full max-w-4xl rounded-lg shadow-lg bg-white">
+    <div className="flex items-center justify-center min-h-screen w-full bg-gray-100">
+      <div className="flex flex-col md:flex-row w-full max-w-[1440px] h-[900px] rounded-lg shadow-lg bg-white">
         {/* Left Section - Form */}
-        <div className="w-full md:w-1/2 p-6 sm:p-8">
+        <div className="w-full md:w-[611.405px] p-10 md:mr-[177.19px]">
           <img
             src={logo}
             alt="WorkForce Logo"
-            className="mb-6 h-12 sm:h-16 mx-auto md:mx-0"
+            className="mb-[99.35px] h-[79.5px] w-[288.42px] t-[67.65px] l-[72.9px] md:mx-0"
           />
-          <h2 className="text-xl sm:text-2xl font-bold mb-2 text-center md:text-left">
+          <h2 className="text-4xl font-bold mb-3 h-[54px] w-[98px] text-gray-900 text-left">
             Login
           </h2>
-          <p className="text-gray-600 mb-6 text-sm sm:text-base text-center md:text-left">
+          <p className="text-gray-600 mb-[23.25px]  text-base text-left">
             Welcome back! Please enter your details to login.
           </p>
           <form onSubmit={handleSubmit}>
-            <div className="mb-4">
+            <div className="mb-[12px]">
               <Label htmlFor="email" className="sr-only">
-                Email
+                Email Address
               </Label>
               <Input
                 id="email"
@@ -82,16 +82,14 @@ const App = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email Address"
-                className="mt-1 w-full border-gray-300 text-sm sm:text-base"
+                className="w-full border-gray-300 rounded-md p-3 text-base focus:ring-0 focus:border-gray-400"
               />
               {errors.email && (
-                <p className="text-red-500 text-xs sm:text-sm mt-1">
-                  {errors.email}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
               )}
             </div>
 
-            <div className="mb-4">
+            <div className="mb-[20.5px]">
               <Label htmlFor="password" className="sr-only">
                 Password
               </Label>
@@ -101,8 +99,8 @@ const App = () => {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="mt-1 w-full pr-10 text-sm sm:text-base"
                   placeholder="Password"
+                  className="w-full border-gray-300 rounded-md p-3 text-base pr-10 focus:ring-0 focus:border-gray-400"
                 />
                 <button
                   type="button"
@@ -111,56 +109,55 @@ const App = () => {
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
-                    <Eye className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <Eye className="h-5 w-5" />
                   ) : (
-                    <EyeOff className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <EyeOff className="h-5 w-5" />
                   )}
                 </button>
               </div>
               {errors.password && (
-                <p className="text-red-500 text-xs sm:text-sm mt-1">
-                  {errors.password}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
               )}
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-between mb-6 space-y-4 sm:space-y-0">
+            <div className="flex items-center justify-between mb-6">
               <div className="flex items-center">
                 <Checkbox
                   id="remember"
                   checked={rememberMe}
                   onCheckedChange={setRememberMe}
+                  className="h-4 w-4"
                 />
-                <Label htmlFor="remember" className="ml-2 text-xs sm:text-sm">
+                <Label
+                  htmlFor="remember"
+                  className="ml-2 text-sm text-gray-600"
+                >
                   Remember me
                 </Label>
               </div>
-              <a
-                href="#"
-                className="text-xs sm:text-sm text-green-600 hover:underline"
-              >
+              <a href="#" className="text-sm text-green-600 hover:underline">
                 Forgot Password
               </a>
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-700 text-white text-sm sm:text-base"
+              className="md-[221.88px] w-full bg-green-800 text-white rounded-md py-3 text-base font-medium"
             >
               Login
             </Button>
           </form>
         </div>
 
-        {/* Right Section - Image (Hidden on mobile) */}
+        {/* Right Section - Image */}
         <div className="hidden md:block md:w-1/2 relative">
           <img
             src={workerImage}
             alt="Worker with AR glasses"
-            className="h-full w-full object-cover rounded-r-lg"
+            className="absolute w-[576px] h-[764.25px] top-[40.88px] left-[61.98px] rounded-[28.1px] object-cover"
           />
-          <div className="absolute bottom-4 left-0 right-0 flex justify-center">
-            <img src={Sign} alt="Sign" className="h-6 sm:h-8" />
+          <div className="absolute bottom-6 left-0 right-0 flex justify-center">
+            <img src={Sign} alt="Sign" className="h-8" />
           </div>
         </div>
       </div>
