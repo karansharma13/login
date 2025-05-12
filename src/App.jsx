@@ -7,7 +7,7 @@ import logo from "./assets/workforce-logo.png"; // Replace with your logo path
 import workerImage from "./assets/worker-image.png"; // Replace with your worker image path
 import Sign from "./assets/sign.png"; // Replace with your logo path
 import { Eye, EyeOff } from "lucide-react"; // Import the Eye and EyeOff components
-
+import UserTable from "./components/ui/UserTable";
 const App = () => {
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -57,22 +57,22 @@ const App = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen w-full bg-gray-100">
-      <div className="flex flex-col md:flex-row w-full max-w-[1440px] h-[900px] rounded-lg shadow-lg bg-white">
+      <div className="flex flex-col md:flex-row w-full min-h-screen rounded-lg shadow-lg bg-white">
         {/* Left Section - Form */}
         <div className="w-full md:w-[611.405px] p-10 md:mr-[177.19px]">
           <img
             src={logo}
             alt="WorkForce Logo"
-            className="mb-[99.35px] h-[79.5px] w-[288.42px] t-[67.65px] l-[72.9px] md:mx-0"
+            className="mb-[99.35px] h-[79.5px] w-[288.42px] t-[67.65px] l-[80.9px] md:mx-0"
           />
-          <h2 className="text-4xl font-bold mb-3 h-[54px] w-[98px] text-gray-900 text-left">
+          <h2 className="text-4xl font-bold mb-3 h-[54px] w-[98px] l-[80.9px] text-gray-900 text-left">
             Login
           </h2>
           <p className="text-gray-600 mb-[23.25px]  text-base text-left">
             Welcome back! Please enter your details to login.
           </p>
           <form onSubmit={handleSubmit}>
-            <div className="mb-[12px]">
+            <div className="mb-[12px] l-[80.9px]">
               <Label htmlFor="email" className="sr-only">
                 Email Address
               </Label>
@@ -156,7 +156,7 @@ const App = () => {
             alt="Worker with AR glasses"
             className="absolute w-[576px] h-[764.25px] top-[40.88px] left-[61.98px] rounded-[28.1px] object-cover"
           />
-          <div className="absolute bottom-6 left-0 right-0 flex justify-center">
+          <div className="absolute w-[132.5px] h-[41.25px] top-[83.62px] left-[140.54px] flex justify-center">
             <img src={Sign} alt="Sign" className="h-8" />
           </div>
         </div>
