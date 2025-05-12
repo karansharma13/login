@@ -11,12 +11,13 @@ import { Eye, EyeOff } from "lucide-react"; // Import the Eye and EyeOff compone
 const App = () => {
   const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
   const [rememberMe, setRememberMe] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   // Email and Password validation
   const validateForm = () => {
@@ -55,43 +56,52 @@ const App = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-screen bg-gray-100">
-      <div className="flex w-auto h-auto rounded-lg shadow-lg bg-white">
+    <div className="flex items-center justify-center min-h-screen w-full bg-gray-100 px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col md:flex-row w-full max-w-4xl rounded-lg shadow-lg bg-white">
         {/* Left Section - Form */}
-        <div className="w-full md:w-1/2 p-8">
-          <div className="flex items-center mb-6"></div>
-          <img src={logo} alt="WorkForce Logo" className="mb-10 h-17" />
-          <h2 className="text-2xl font-bold mb-2">Login</h2>
-          <p className="text-gray-600 mb-6">
+        <div className="w-full md:w-1/2 p-6 sm:p-8">
+          <img
+            src={logo}
+            alt="WorkForce Logo"
+            className="mb-6 h-12 sm:h-16 mx-auto md:mx-0"
+          />
+          <h2 className="text-xl sm:text-2xl font-bold mb-2 text-center md:text-left">
+            Login
+          </h2>
+          <p className="text-gray-600 mb-6 text-sm sm:text-base text-center md:text-left">
             Welcome back! Please enter your details to login.
           </p>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <Label htmlFor="email"></Label>
+              <Label htmlFor="email" className="sr-only">
+                Email
+              </Label>
               <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                // className="mt-1"
                 placeholder="Email Address"
-                className="mt-1 border-gray-300"
+                className="mt-1 w-full border-gray-300 text-sm sm:text-base"
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                <p className="text-red-500 text-xs sm:text-sm mt-1">
+                  {errors.email}
+                </p>
               )}
             </div>
 
             <div className="mb-4">
-              <Label htmlFor="password"></Label>
-
+              <Label htmlFor="password" className="sr-only">
+                Password
+              </Label>
               <div className="relative">
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="mt-1 pr-10"
+                  className="mt-1 w-full pr-10 text-sm sm:text-base"
                   placeholder="Password"
                 />
                 <button
@@ -101,51 +111,56 @@ const App = () => {
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
-                    <Eye className="h-5 w-5" />
+                    <Eye className="h-4 w-4 sm:h-5 sm:w-5" />
                   ) : (
-                    <EyeOff className="h-5 w-5" />
+                    <EyeOff className="h-4 w-4 sm:h-5 sm:w-5" />
                   )}
                 </button>
               </div>
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                <p className="text-red-500 text-xs sm:text-sm mt-1">
+                  {errors.password}
+                </p>
               )}
             </div>
 
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col sm:flex-row items-center justify-between mb-6 space-y-4 sm:space-y-0">
               <div className="flex items-center">
                 <Checkbox
                   id="remember"
                   checked={rememberMe}
                   onCheckedChange={setRememberMe}
                 />
-                <Label htmlFor="remember" className="ml-2 text-sm">
+                <Label htmlFor="remember" className="ml-2 text-xs sm:text-sm">
                   Remember me
                 </Label>
               </div>
-              <a href="#" className="text-sm text-green-600 hover:underline">
+              <a
+                href="#"
+                className="text-xs sm:text-sm text-green-600 hover:underline"
+              >
                 Forgot Password
               </a>
             </div>
 
             <Button
               type="submit"
-              className="w-full bg-green-600 hover:bg-green-700 text-white"
+              className="w-full bg-green-600 hover:bg-green-700 text-white text-sm sm:text-base"
             >
               Login
             </Button>
           </form>
         </div>
 
-        {/* Right Section - Image */}
-        <div className="w-1/2 relative">
+        {/* Right Section - Image (Hidden on mobile) */}
+        <div className="hidden md:block md:w-1/2 relative">
           <img
             src={workerImage}
             alt="Worker with AR glasses"
-            className="h-medium w-medium object-cover rounded-r-lg"
+            className="h-full w-full object-cover rounded-r-lg"
           />
-          <div className="mt-5 flex items-center justify-center">
-            <img src={Sign} alt="Sign" className="h-8" />
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center">
+            <img src={Sign} alt="Sign" className="h-6 sm:h-8" />
           </div>
         </div>
       </div>
