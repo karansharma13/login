@@ -90,7 +90,7 @@ const Login = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen w-full bg-gray-100">
-      <div className="flex flex-col md:flex-row w-full max-w-[1440px] h-[900px] rounded-lg shadow-lg bg-white">
+      <div className="flex flex-col md:flex-row w-full max-w-[1440px] h-[700px] rounded-lg shadow-lg bg-white">
         {/* Left Section - Form */}
         <div className="w-full md:w-[611.405px] p-10 md:mr-[177.19px]">
           <img
@@ -198,9 +198,9 @@ const Login = () => {
           <img
             src={workerImage}
             alt="Worker with AR glasses"
-            className="absolute w-[576px] h-[764.25px] top-[40.88px] left-[-26.565px] rounded-[28.1px] object-cover"
+            className="absolute w-[576px] h-[564.25px] top-[40.88px] left-[-26.565px] rounded-[28.1px] object-cover"
           />
-          <div className="absolute bottom-6 left-0 right-0 flex justify-center">
+          <div className="absolute bottom-10 left-0 right-0 flex justify-center">
             <img src={Sign} alt="Sign" className="h-8" />
           </div>
         </div>
