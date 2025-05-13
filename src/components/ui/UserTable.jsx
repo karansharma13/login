@@ -13,36 +13,50 @@ const UserTable = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1); // Current page
+  const [limit, setLimit] = useState(5); // Users per page
+  const [totalUsers, setTotalUsers] = useState(0); // Total users from API
   const navigate = useNavigate();
 
-  // Fetch users from the API
+  // Fetch users from the API with pagination
   useEffect(() => {
     const fetchUsers = async () => {
+      setLoading(true);
       try {
-        const response = await fetch("https://dummyjson.com/users");
+        const skip = (page - 1) * limit; // Calculate skip for pagination
+        const response = await fetch(
+          `https://dummyjson.com/users?limit=${limit}&skip=${skip}`
+        );
         if (!response.ok) {
-          throw new Error("Failed to fetch users");
+          throw new Error(`Failed to fetch users: ${response.statusText}`);
         }
         const data = await response.json();
-        setUsers(data.users); // The API returns a "users" array
+        console.log("API Response:", data);
+        if (!data.users || !Array.isArray(data.users)) {
+          throw new Error("Unexpected API response: 'users' array not found");
+        }
+        setUsers(data.users);
+        setTotalUsers(data.total); // Total users from API response
         setLoading(false);
       } catch (err) {
+        console.error("Fetch Error:", err);
         setError(err.message);
         setLoading(false);
       }
     };
 
     fetchUsers();
-  }, []);
+  }, [page, limit]); // Re-fetch when page or limit changes
 
   // Test the API response structure
   useEffect(() => {
     if (users.length > 0) {
-      console.log("Sample user data:", users[0]);
+      console.log("Users Data Sample:", users[0]);
+    } else if (!loading && !error) {
+      console.log("No users data received");
     }
-  }, [users]);
+  }, [users, loading, error]);
 
-  // Define columns using createColumnHelper
   const columnHelper = createColumnHelper();
   const columns = useMemo(
     () => [
@@ -78,14 +92,29 @@ const UserTable = () => {
     []
   );
 
-  // Initialize TanStack Table
   const table = useReactTable({
     data: users,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
-  // Loading state
+  // Calculate total pages
+  const totalPages = Math.ceil(totalUsers / limit);
+
+  // Handle page change
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setPage(newPage);
+    }
+  };
+
+  // Handle limit change
+  const handleLimitChange = (e) => {
+    const newLimit = parseInt(e.target.value, 10);
+    setLimit(newLimit);
+    setPage(1); // Reset to page 1 when limit changes
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen w-full bg-gray-100">
@@ -96,7 +125,6 @@ const UserTable = () => {
     );
   }
 
-  // Error state
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-screen w-full bg-gray-100">
@@ -163,6 +191,48 @@ const UserTable = () => {
               ))}
             </tbody>
           </table>
+        </div>
+        {/* Pagination Controls */}
+        <div className="flex justify-between items-center mt-6">
+          <div className="flex items-center space-x-4">
+            <span className="text-gray-600">
+              Showing {users.length} of {totalUsers} users
+            </span>
+            <div className="flex items-center space-x-2">
+              <label htmlFor="limit" className="text-gray-600">
+                Users per page:
+              </label>
+              <select
+                id="limit"
+                value={limit}
+                onChange={handleLimitChange}
+                className="border rounded-md p-1"
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+              </select>
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Button
+              onClick={() => handlePageChange(page - 1)}
+              disabled={page === 1}
+              className="bg-gray-300 text-gray-700 rounded-md py-1 px-3 disabled:opacity-50"
+            >
+              Previous
+            </Button>
+            <span className="text-gray-600">
+              Page {page} of {totalPages}
+            </span>
+            <Button
+              onClick={() => handlePageChange(page + 1)}
+              disabled={page === totalPages}
+              className="bg-gray-300 text-gray-700 rounded-md py-1 px-3 disabled:opacity-50"
+            >
+              Next
+            </Button>
+          </div>
         </div>
       </div>
     </div>

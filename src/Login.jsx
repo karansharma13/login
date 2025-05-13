@@ -79,6 +79,7 @@ const Login = () => {
       setShowPassword(false);
 
       // Navigate to the users table page
+      console.log("Navigating to /users");
       navigate("/users");
     } catch (error) {
       setErrors({ email: "", password: "", general: error.message });
