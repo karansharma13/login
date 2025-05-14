@@ -6,17 +6,22 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { Button } from "./button";
+import { Input } from "./input";
 import logo from "../../assets/workforce-logo.png"; // Replace with your logo path
 import { useNavigate } from "react-router-dom";
 import { isAuthenticated, logout } from "../../services/authService";
+import { Search, User, Users } from "lucide-react";
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1); // Current page
   const [limit, setLimit] = useState(5); // Users per page
   const [totalUsers, setTotalUsers] = useState(0); // Total users from API
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeGenderFilter, setActiveGenderFilter] = useState("all"); // "all", "male", "female"
   const navigate = useNavigate();
 
   // Check if user is logged in
@@ -63,6 +68,7 @@ const UserTable = () => {
           throw new Error("Unexpected API response: 'users' array not found");
         }
         setUsers(data.users);
+        setFilteredUsers(data.users);
         setTotalUsers(data.total); // Total users from API response
         setLoading(false);
       } catch (err) {
@@ -74,6 +80,40 @@ const UserTable = () => {
 
     fetchUsers();
   }, [page, limit, navigate]); // Re-fetch when page or limit changes
+
+  // Search and filter functionality
+  useEffect(() => {
+    // First apply the gender filter
+    let result = users;
+    
+    if (activeGenderFilter !== "all") {
+      result = users.filter(user => user.gender === activeGenderFilter);
+    }
+    
+    // Then apply the search filter if there's a search term
+    if (searchTerm.trim() !== "") {
+      const term = searchTerm.toLowerCase();
+      result = result.filter(user => 
+        user.firstName.toLowerCase().includes(term) ||
+        user.lastName.toLowerCase().includes(term) ||
+        user.email.toLowerCase().includes(term) ||
+        user.phone.includes(term)
+      );
+    }
+    
+    setFilteredUsers(result);
+  }, [users, searchTerm, activeGenderFilter]);
+
+  // Handle search
+  const handleSearch = () => {
+    // The actual filtering happens in the useEffect above
+    console.log("Searching for:", searchTerm);
+  };
+
+  // Handle gender filter
+  const handleGenderFilter = (gender) => {
+    setActiveGenderFilter(gender);
+  };
 
   // Test the API response structure
   useEffect(() => {
@@ -120,7 +160,7 @@ const UserTable = () => {
   );
 
   const table = useReactTable({
-    data: users,
+    data: filteredUsers,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -185,6 +225,63 @@ const UserTable = () => {
             Log Out
           </Button>
         </div>
+        
+        {/* Search and Filter Controls */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+          <div className="flex items-center w-full md:w-auto">
+            <Input
+              type="text"
+              placeholder="Search by name, email, or phone"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="border-gray-300 rounded-l-md p-2 text-base focus:ring-0 focus:border-gray-400 w-full md:w-80"
+            />
+            <Button
+              onClick={handleSearch}
+              className="bg-green-700 text-white rounded-r-md py-2 px-4 border border-green-700"
+            >
+              <Search className="h-5 w-5" />
+            </Button>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <span className="text-gray-600 mr-2">Filter:</span>
+            <Button
+              onClick={() => handleGenderFilter("all")}
+              className={`py-2 px-4 rounded-md flex items-center gap-1 ${
+                activeGenderFilter === "all"
+                  ? "bg-green-700 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+            >
+              <Users className="h-4 w-4" />
+              All
+            </Button>
+            <Button
+              onClick={() => handleGenderFilter("male")}
+              className={`py-2 px-4 rounded-md flex items-center gap-1 ${
+                activeGenderFilter === "male"
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+            >
+              <User className="h-4 w-4" />
+              Male
+            </Button>
+            <Button
+              onClick={() => handleGenderFilter("female")}
+              className={`py-2 px-4 rounded-md flex items-center gap-1 ${
+                activeGenderFilter === "female"
+                  ? "bg-pink-500 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+            >
+              <User className="h-4 w-4" />
+              Female
+            </Button>
+          </div>
+        </div>
+        
         <div className="overflow-x-auto">
           <table className="w-full bg-white shadow-lg rounded-lg">
             <thead>
@@ -207,29 +304,41 @@ const UserTable = () => {
               ))}
             </thead>
             <tbody>
-              {table.getRowModel().rows.map((row) => (
-                <tr
-                  key={row.id}
-                  className="border-b border-gray-200 hover:bg-gray-50"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="py-3 px-4 text-gray-600">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
+              {table.getRowModel().rows.length > 0 ? (
+                table.getRowModel().rows.map((row) => (
+                  <tr
+                    key={row.id}
+                    className="border-b border-gray-200 hover:bg-gray-50"
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <td key={cell.id} className="py-3 px-4 text-gray-600">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={columns.length}
+                    className="py-8 text-center text-gray-500"
+                  >
+                    No users found matching your criteria
+                  </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
+        
         {/* Pagination Controls */}
         <div className="flex justify-between items-center mt-6">
           <div className="flex items-center space-x-4">
             <span className="text-gray-600">
-              Showing {users.length} of {totalUsers} users
+              Showing {filteredUsers.length} of {totalUsers} users
             </span>
             <div className="flex items-center space-x-2">
               <label htmlFor="limit" className="text-gray-600">

@@ -6,16 +6,17 @@ import { defineConfig } from "vite";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  resolve: {
-    server: {
+  server: {
+    host: "localhost",
+    port: 5173,
+    hmr: {
+      protocol: "ws",
       host: "localhost",
       port: 5173,
-      hmr: {
-        protocol: "ws",
-        host: "localhost",
-        port: 5173,
-      },
     },
+    historyApiFallback: true,
+  },
+  resolve: {
     alias: {
       "@": path.resolve("./src"),
       // server: {
@@ -25,4 +26,5 @@ export default defineConfig({
       // },
     },
   },
+  base: "/",
 });

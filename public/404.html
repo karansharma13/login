@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting...</title>
+  <script>
+    // Redirect to the home page but preserve the URL path
+    const path = window.location.pathname;
+    const url = new URL(window.location);
+    
+    // On gh-pages, we need to handle the repository name in the path
+    // For other hosts, this will just be the path
+    const route = path.replace(/^\/[^/]+/, '');
+    
+    // Store the full URL in localStorage
+    localStorage.setItem('redirectPath', route);
+    
+    // Redirect to the main page
+    window.location.href = '/';
+  </script>
+</head>
+<body>
+  <p>Redirecting to home page...</p>
+</body>
+</html> 
