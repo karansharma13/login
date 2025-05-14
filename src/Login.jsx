@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
@@ -8,6 +8,7 @@ import logo from "./assets/workforce-logo.png"; // Replace with your logo path
 import workerImage from "./assets/worker-image.png"; // Replace with your worker image path
 import Sign from "./assets/sign.png"; // Replace with your logo path
 import { Eye, EyeOff } from "lucide-react"; // Import the Eye and EyeOff components
+import { isAuthenticated, login } from "./services/authService";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -21,6 +22,14 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Check if user is already logged in
+  useEffect(() => {
+    if (isAuthenticated()) {
+      // If authenticated, navigate to users page
+      navigate("/users");
+    }
+  }, [navigate]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -64,13 +73,22 @@ const Login = () => {
     try {
       await new Promise((resolve, reject) => {
         setTimeout(() => {
-          if (email === "test@example.com" && password === "password123") {
+          if (
+            email === "karan_sharma@gmail.com" &&
+            password === "password123"
+          ) {
             resolve();
           } else {
             reject(new Error("Invalid email or password"));
           }
         }, 1000);
       });
+
+      // Generate a mock auth token
+      const authToken = "mock-auth-token-" + Date.now();
+      
+      // Use the auth service to login
+      login(authToken, rememberMe);
 
       // Clear form state
       setEmail("");

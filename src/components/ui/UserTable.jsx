@@ -8,6 +8,7 @@ import {
 import { Button } from "./button";
 import logo from "../../assets/workforce-logo.png"; // Replace with your logo path
 import { useNavigate } from "react-router-dom";
+import { isAuthenticated, logout } from "../../services/authService";
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
@@ -18,20 +19,46 @@ const UserTable = () => {
   const [totalUsers, setTotalUsers] = useState(0); // Total users from API
   const navigate = useNavigate();
 
-  // Fetch users from the API with pagination
+  // Check if user is logged in
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      console.log("UserTable: Not authenticated, redirecting to /");
+      navigate("/"); // Redirect to login if not authenticated
+    }
+  }, [navigate]);
+
+  // Fetch users from the API with pagination and auth token
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
+      if (!isAuthenticated()) {
+        setError("Please log in to view users");
+        setLoading(false);
+        navigate("/");
+        return;
+      }
+
       try {
         const skip = (page - 1) * limit; // Calculate skip for pagination
         const response = await fetch(
           `https://dummyjson.com/users?limit=${limit}&skip=${skip}`
+          //{
+          //   headers: {
+          //     Authorization: `Bearer ${token}`,
+          //   },
+          // }
         );
+
         if (!response.ok) {
+          if (response.status === 401) {
+            logout();
+            navigate("/");
+            throw new Error("Session expired. Please log in again.");
+          }
           throw new Error(`Failed to fetch users: ${response.statusText}`);
         }
         const data = await response.json();
-        console.log("API Response:", data);
+        console.log("UserTable: Fetch response data:", data);
         if (!data.users || !Array.isArray(data.users)) {
           throw new Error("Unexpected API response: 'users' array not found");
         }
@@ -46,7 +73,7 @@ const UserTable = () => {
     };
 
     fetchUsers();
-  }, [page, limit]); // Re-fetch when page or limit changes
+  }, [page, limit, navigate]); // Re-fetch when page or limit changes
 
   // Test the API response structure
   useEffect(() => {
@@ -115,6 +142,12 @@ const UserTable = () => {
     setPage(1); // Reset to page 1 when limit changes
   };
 
+  // Handle logout
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen w-full bg-gray-100">
@@ -146,7 +179,7 @@ const UserTable = () => {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-4xl font-bold text-gray-900">User List</h2>
           <Button
-            onClick={() => navigate("/")}
+            onClick={handleLogout}
             className="bg-green-800 text-white rounded-md py-2 px-4 text-base font-medium"
           >
             Log Out
@@ -210,6 +243,7 @@ const UserTable = () => {
               >
                 <option value={5}>5</option>
                 <option value={10}>10</option>
+                <option value={15}>15</option>
                 <option value={20}>20</option>
               </select>
             </div>

@@ -7,8 +7,22 @@ import { defineConfig } from "vite";
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
+    server: {
+      host: "localhost",
+      port: 5173,
+      hmr: {
+        protocol: "ws",
+        host: "localhost",
+        port: 5173,
+      },
+    },
     alias: {
       "@": path.resolve("./src"),
+      // server: {
+      //   proxy: {
+      //     "/api": "https://dummyjson.com",
+      //   },
+      // },
     },
   },
 });
