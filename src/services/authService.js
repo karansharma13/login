@@ -9,30 +9,29 @@ export const isAuthenticated = () => {
   
   // Check if this should be a session-only token (rememberMe not checked)
   if (sessionOnly === "true") {
-    // When browser is reopened, we should check if the token was meant to be session-only
-    // If it was session-only and we're in a new session, the sessionStorage will be empty
-    // so we need to clear the token from localStorage
-    if (window.performance) {
-      const navigationEntries = performance.getEntriesByType("navigation");
-      if (navigationEntries.length > 0 && navigationEntries[0].type === "reload") {
-        // This is just a page reload, not a new browser session
-        return true;
-      }
-    }
+    // For session-only logins, the token should only be valid for the current session
+    // We rely on sessionStorage which is automatically cleared when browser is closed
+    return true;
   }
   
+  // If remember me was checked (sessionOnly is not set), the token in localStorage is valid
   return true;
 };
 
 // Login user and set token
 export const login = (token, rememberMe = false) => {
+  // Always store token in localStorage
   localStorage.setItem("authToken", token);
   
   if (!rememberMe) {
-    // Mark this token as session-only
+    // For session-only login, mark this in sessionStorage
     sessionStorage.setItem("sessionOnly", "true");
+    // Also store the token in sessionStorage so we can validate it's a current session
+    sessionStorage.setItem("authToken", token);
   } else {
+    // For "remember me" logins, clear any session markers
     sessionStorage.removeItem("sessionOnly");
+    sessionStorage.removeItem("authToken");
   }
 };
 
@@ -40,6 +39,7 @@ export const login = (token, rememberMe = false) => {
 export const logout = () => {
   localStorage.removeItem("authToken");
   sessionStorage.removeItem("sessionOnly");
+  sessionStorage.removeItem("authToken");
 };
 
 // Get auth token

@@ -19,7 +19,7 @@ const Login = () => {
     password: "",
     general: "",
   });
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -107,8 +107,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full bg-gray-100">
-      <div className="flex flex-col md:flex-row w-full max-w-[1440px] h-[700px] rounded-lg shadow-lg bg-white">
+    <div className="flex items-center justify-center min-h-screen w-full bg-gray-100 px-4 py-6">
+      <div className="flex flex-col md:flex-row w-full max-w-[1440px] h-auto md:h-[700px] rounded-lg shadow-lg bg-white overflow-hidden">
         {/* Left Section - Form */}
         <div className="w-full md:w-[611.405px] p-10 md:mr-[177.19px]">
           <img
@@ -116,14 +116,14 @@ const Login = () => {
             alt="WorkForce Logo"
             className="mb-[99.35px] h-[79.5px] w-[288.42px] t-[67.65px] l-[72.9px] md:mx-0"
           />
-          <h2 className="text-4xl font-bold mb-3 h-[54px] w-[98px] text-gray-900 text-left">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 md:mb-3 text-gray-900 text-center md:text-left">
             Login
           </h2>
-          <p className="text-gray-600 mb-[23.25px] text-base text-left">
+          <p className="text-gray-600 mb-4 md:mb-[23.25px] text-sm sm:text-base text-center md:text-left">
             Welcome back! Please enter your details to login.
           </p>
           <form onSubmit={handleSubmit}>
-            <div className="mb-[12px]">
+            <div className="mb-3 md:mb-[12px]">
               <Label htmlFor="email" className="sr-only">
                 Email Address
               </Label>
@@ -141,7 +141,7 @@ const Login = () => {
               )}
             </div>
 
-            <div className="mb-[20.5px]">
+            <div className="mb-4 md:mb-[20.5px]">
               <Label htmlFor="password" className="sr-only">
                 Password
               </Label>
@@ -180,7 +180,7 @@ const Login = () => {
               </p>
             )}
 
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3 sm:gap-0">
               <div className="flex items-center">
                 <Checkbox
                   id="remember"
@@ -212,13 +212,13 @@ const Login = () => {
         </div>
 
         {/* Right Section - Image */}
-        <div className="hidden md:block md:w-[611.405px] relative">
+        <div className="hidden md:block md:w-1/2 lg:w-[611.405px] relative">
           <img
             src={workerImage}
             alt="Worker with AR glasses"
             className="absolute w-[576px] h-[564.25px] top-[40.88px] left-[-26.565px] rounded-[28.1px] object-cover"
           />
-          <div className="absolute bottom-10 left-0 right-0 flex justify-center">
+          <div className="absolute bottom-10 left-0 right-0 flex justify-center ">
             <img src={Sign} alt="Sign" className="h-8" />
           </div>
         </div>
