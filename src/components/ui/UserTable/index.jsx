@@ -54,7 +54,7 @@ const UserTable = () => {
     };
 
     loadUsers();
-  });
+  }, [page, limit]);
 
   // Apply filters when filtering conditions change
   useEffect(() => {

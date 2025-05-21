@@ -11,7 +11,7 @@ const UserTableView = ({ table, columns }) => {
               {headerGroup.headers.map((header) => (
                 <th
                   key={header.id}
-                  className="py-3 px-2 sm:px-4 text-left text-gray-700 font-semibold text-sm whitespace-nowrap"
+                  className="py-3 px-2 sm:px-4 text-left text-gray-700 font-bold text-sm whitespace-nowrap"
                 >
                   {header.isPlaceholder
                     ? null
@@ -29,10 +29,10 @@ const UserTableView = ({ table, columns }) => {
             table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
-                className="border-b border-gray-200 hover:bg-gray-50"
+                className="border-b  border-gray-200 hover:bg-gray-50"
               >
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="py-3 px-2 sm:px-4 text-gray-600 text-sm">
+                  <td key={cell.id} className="py-5 px-2 sm:px-4 text-gray-600 text-l">
                     {flexRender(
                       cell.column.columnDef.cell,
                       cell.getContext()
@@ -45,7 +45,7 @@ const UserTableView = ({ table, columns }) => {
             <tr>
               <td
                 colSpan={columns.length}
-                className="py-8 text-center text-gray-500"
+                className="py-10 text-center text-gray-500"
               >
                 No users found matching your criteria
               </td>
